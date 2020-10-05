@@ -5,8 +5,26 @@
 ## Hardware build
 TODO
 
-## Docker Compose file
-This Compose file assumes you're running in Swarm mode and you want this service to run on all of your Pi's.
+## Prerequisites
+Firstly, you need [pigpio](http://abyz.me.uk/rpi/pigpio/index.html) running as a daemon on your Pi. This service exposes port 8888 that other services can then use to get low-level access to the Raspberry Pi's GPIO pins.
+
+The easiest way to set up pigpio, if you are not already running it, is using [corbosman/node-red-gpiod](https://github.com/corbosman/node-red-gpiod)'s Docker image.
+
+```
+docker run -d -p 8888:8888 --privileged --name gpiod corbosman/pigpiod -s 2
+```
+
+`-s 2` is used by pigpio so that we can run the fan PWM at 20 kHz, mostly above human hearing range. Any lower and you will start to hear an audible hum from the fan motor coils.
+
+Unfortunately Docker Swarm mode does not yet support the "privileged" directive, which pigpio needs to be able to get access to GPIO pins. You will need to run this command on each of your Pi's where you want to run the fan controller.
+
+## Fan control
+
+```
+docker run -d .... TODO
+```
+
+If you are running in Swarm mode, add the following to your docker-compose.yaml file:
 
 ```
 TODO
